@@ -1,21 +1,25 @@
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
 
-public class jsonString {
-
+public class ParsingJSON {
     private static HttpURLConnection connection;
-
-    public  String giveString(String lnk) {
+    String link;
+    ParsingJSON(String link){
+        this.link = link;
+    }
+    public  String giveString() {
         BufferedReader reader;
         String line;
         StringBuffer responceContent = new StringBuffer();
         try {
-            URL url = new URL(lnk);
+            URL url = new URL(link);
             connection = (HttpURLConnection) url.openConnection();
             int status = connection.getResponseCode();
             // System.out.println(status);
@@ -43,12 +47,8 @@ public class jsonString {
             return "Error";
         }
     }
+    public static  void main(){
 
-    public static void main(String[] agrs){
-        // lnk is the link to the json file from the web
-        String lnk = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=TSLA&apikey=https://www.alphavantage.co/";
-        jsonString yo = new jsonString();
-        String jsonData = yo.giveString(lnk);
-        System.out.println(jsonData.substring(0,100));
+
     }
 }
