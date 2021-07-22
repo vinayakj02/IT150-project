@@ -25,6 +25,15 @@ public class Account {
 	public double getBalance() {
 		return this.balance;
 	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
 	//This method adds sales amount to user bank account 
 public void addMoney(double amt)
 {
