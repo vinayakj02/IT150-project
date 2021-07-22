@@ -56,6 +56,7 @@ public class Stock {
     public double getVolume(String date) throws JSONException {
         return Double.parseDouble(js.getJSONObject("Time Series (Daily)").getJSONObject(date).getString("5. volume"));
     }
+//     StockTrend(String date1,String date2)->String , returns how much the stock has increased/decreased in the given time period
     public String StockTrend(String date1,String date2) throws JSONException {
         double price1 = this.getClosePrice(date1);
         double price2 = this.getClosePrice(date2);
