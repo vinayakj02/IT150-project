@@ -1,19 +1,34 @@
 
 public class Account {
+	
 	private final String userId;
 	private String userName;
-
+	private String password;
+	private double balance;
+	public String generateId() {
+		final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		String s="";
+		for(int i=0;i<4;i++) {
+			int num=(int)(Math.random()*61)+1;
+			char ch=AB.charAt(num);
+			s+=ch;
+		}
+		return s;
+	}
 	public String getPassword() {
 		return password;
 	}
-
-	private String password;
-	private double balance;
-	public Account() {
-		this.userId="";
+	public Account(String userName,String password,double balance) {
+		this.userId=generateId();
+		this.userName=userName;
+		this.password=password;
+		this.balance=balance;
+	}
+	public Account(String userId,String password) {
+		this.userId=userId;
 		this.userName="";
-		this.password="";
-		this.balance=0.0;
+		this.password=password;
+		this.balance=0;
 	}
 	public Account(String userId,String userName,String password,double balance) {
 		this.userId=userId;
@@ -53,5 +68,4 @@ public boolean deductMoney(double amt)
 		return false;
 	}
 }
-	
 }
