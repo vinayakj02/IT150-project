@@ -9,11 +9,11 @@ public class Account {
 		final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		String s="";
 		for(int i=0;i<4;i++) {
-			int num=(int)(Math.random()*61)+1;
+			int num=(int)(Math.random()*62);
 			char ch=AB.charAt(num);
 			s+=ch;
 		}
-		return s;
+		return "ID" + s;
 	}
 	public String getPassword() {
 		return password;
