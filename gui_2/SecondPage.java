@@ -30,13 +30,14 @@ public class SecondPage extends JFrame implements ActionListener {
 
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setBounds(30,150,120,25);
+        passwordLabel.setForeground(Color.WHITE);
 
         this.setSize(500,600);
         this.add(submit_button);
 
         this.add(passwordLabel);
         this.add(passwordTextField);
-        this.getContentPane().setBackground(Color.GRAY);
+        this.getContentPane().setBackground(new Color(23,23,23));
         this.setVisible(true);
         if(choice==1){
             this.logsin();
@@ -52,6 +53,7 @@ public class SecondPage extends JFrame implements ActionListener {
 
         UserID_JLabel = new JLabel("User Id");
         UserID_JLabel.setBounds(30,120,120,25);
+        UserID_JLabel.setForeground(Color.WHITE);
 
         UserID_TextField = new JTextField();
         UserID_TextField.setBounds(100,120,120,25);
@@ -59,6 +61,7 @@ public class SecondPage extends JFrame implements ActionListener {
 
         JLabel H_LogIn_Jlabel = new JLabel("Log In");
         H_LogIn_Jlabel.setBounds(10,10,120,25);
+        H_LogIn_Jlabel.setForeground(Color.WHITE);
         this.add(H_LogIn_Jlabel);
         this.add(UserID_TextField);
         this.add(UserID_JLabel);
@@ -68,9 +71,11 @@ public class SecondPage extends JFrame implements ActionListener {
     public void createAc(){
         JLabel H_CreateAccount_JLabel = new JLabel("Create Account ");
         H_CreateAccount_JLabel.setBounds(10,10,120,25);
+        H_CreateAccount_JLabel.setForeground(Color.WHITE);
 
         JLabel userNameLabel = new JLabel("Username");
         userNameLabel.setBounds(30,120,120,25);
+        userNameLabel.setForeground(Color.WHITE);
 
         Username_TextField = new JTextField();
         Username_TextField.setBounds(100,120,120,25);
@@ -82,6 +87,7 @@ public class SecondPage extends JFrame implements ActionListener {
 
         JLabel userBalance_JLabel = new JLabel("Balance");
         userBalance_JLabel.setBounds(30,180,120,25);
+        userBalance_JLabel.setForeground(Color.WHITE);
 
         this.add(userNameLabel);
         this.add(H_CreateAccount_JLabel);
