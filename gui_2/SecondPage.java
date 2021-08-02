@@ -21,8 +21,10 @@ public class SecondPage extends JFrame implements ActionListener {
         submit_button.setBounds(100,250,120,25);
         submit_button.addActionListener(this);
         submit_button.setBorder(BorderFactory.createEtchedBorder());
+        submit_button.setBackground(new Color(23,23,23));
+        submit_button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+        submit_button.setForeground(Color.WHITE);
         submit_button.setFocusable(false);
-
         passwordTextField = new JTextField();
         passwordTextField.setBounds(100,150,120,25);
 
@@ -37,7 +39,7 @@ public class SecondPage extends JFrame implements ActionListener {
 
         this.add(passwordLabel);
         this.add(passwordTextField);
-        this.getContentPane().setBackground(new Color(23,23,23));
+        this.getContentPane().setBackground(new Color(64,179,162));
         this.setVisible(true);
         if(choice==1){
             this.logsin();
