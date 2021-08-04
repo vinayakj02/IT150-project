@@ -1,138 +1,137 @@
-import java.util.*;
-import org.json.*;
-import java.io.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Scanner;
 
-public class StockAccount  {
-	private String userID;
-	private Account acc;
-	public StockAccount(String userID,Account acc)
-	{
-		this.userID=userID;
-		this.acc=acc;
-		
-	}
-	/*
-	public void buyStocks(Stock obj,int no)
-....to be filled by Pranav
-	*/
-	// To sell 'no' quantity of Share/Stock obj
-	public void sellStock(Stock obj,int no)throws Exception
-	{
-		Scanner ob=new Scanner(System.in);
-		String symb=obj.getSymbol();
-		boolean check;
-		String s="";
-        FileReader reader = new FileReader("data222.json");
+public class StockAccount extends Account{
+
+    JSONObject UserAccountData,USERDATA,dataUAD,dataUD;
+    private final String UserID;
+    StockAccount(String UserID) throws JSONException, IOException {
+        super(UserID);
+        String s="";
+        this.UserID = UserID;
+        FileReader reader = new FileReader("UserAccount_Data.json");
         Scanner scan = new Scanner(reader);
         while(scan.hasNext()){
             s = s + scan.nextLine();
         }
         reader.close();
-		
-		JSONObject jo=new JSONObject(s);
-		if(!jo.has(userID))
-		{
-			System.out.println("No Stocks owned by you");
-			return;
-		}
-		JSONObject jid=jo.getJSONObject(userID);
-		if(!jid.has(symb))
-		{
-			System.out.println("No stock of "+symb+" found in our portfolio!!!!");
-			return;
-		}
-		JSONObject jstock=jid.getJSONObject(symb);
-		int quant=Integer.parseInt(jstock.getString("CurrentHolding"));
-		//To check if user has required quantity of that particular stock to be sold
-		if(Integer.parseInt(jstock.getString("CurrentHolding"))<no)
-		{
-			System.out.println("You have only "+quant+"shares of the company.Enter Y for rechoosing no of shares of this company you want to sell,N for cancelling this share's sales");
-			char choice=ob.next().charAt(0);
-			int re_no;
-			
-			if((choice=='Y')||(choice=='y'))
-			{
-				System.out.println("Re-Enter the no of shares of "+symb+"you want to sell");
-				re_no=ob.nextInt();
-				if(re_no<=quant)
-				{
-					acc.addMoney(re_no*obj.getClosePrice());
-					System.out.println("Your current balance = "+acc.getBalance())	;				//tax and brokerage calculations to be dealt later
-					System.out.println(re_no+" shares of "+symb+"sold...");
-					System.out.println("Current holding of "+symb+" = "+(quant-re_no));
-					jstock.put("CurrentHolding",String.format("%d", quant-re_no));
-					jid.put("OverallCurrentHolding",String.format("%d", Integer.parseInt(jid.getString("OverallCurrentHolding"))-re_no));
-					jid.put("OverallSales",String.format("%f",Float.parseFloat(jid.getString("OverallSales"))+(Float.parseFloat(String.format("%.2f", re_no*obj.getClosePrice()) ))));
-					
-					// display invoice.....
-					
-					
-				}
-				else
-				{
-					System.out.println("You have again entered invalid no of shares to sell. So cancelling this sale");
-					return;
-				}
-			
-		}
-		}
-		else
-		{
-			acc.addMoney(no*obj.getClosePrice());
-			System.out.println("Your current balance = "+acc.getBalance())	;
-			//tax and brokerage calculations to be dealt later
-			System.out.println(no+" shares of "+symb+"sold...");
-			System.out.println("Current holding of "+symb+" = "+(quant-no));
-			jstock.put("CurrentHolding",String.format("%d", quant-no));
-			jid.put("OverallCurrentHolding",String.format("%d", Integer.parseInt(jid.getString("OverallCurrentHolding"))-no));
-			jid.put("OverallSales",String.format("%f",Float.parseFloat(jid.getString("OverallSales"))+(Float.parseFloat(String.format("%.2f", (no*obj.getClosePrice()) )))));
-			// display invoice.....
-			
-		}
-			// To update the StockAccount file
-			jid.put(symb,jstock);
-			jo.put(userID, jid);
-			 try {
-		         FileWriter file = new FileWriter("data222.json");
-//		         file.write(jsonObject.toJSONString());
-		         file.write(jo.toString());
-		         file.close();
-		      } catch (IOException e) {
-		         // TODO Auto-generated catch block
-		         e.printStackTrace();
-		      }
-			 
-		
-		return;
-		
-		
-	}
-	//....some methods to be added after discussion 
-	
-	
-	
+        dataUAD = new JSONObject(s);
+        UserAccountData = dataUAD.getJSONObject(UserID);
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Account a=new Account();
-		StockAccount s=new StockAccount("id1",a);
-		Stock sto = null;
-		try {
-			sto = new Stock("IBM");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			s.sellStock(sto, 210);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
+        String s3 = "";
+        FileReader readerx = new FileReader("USERDATA.json");
+        Scanner scanx = new Scanner(readerx);
+        while(scanx.hasNext()){
+            s3  = s3 + scanx.nextLine();
+        }
+        readerx.close();
+        dataUD = new JSONObject(s3);
+        USERDATA = dataUD.getJSONObject(UserID);
 
-	}
+    }
+    public String getUserID(){
+        return this.UserID;
+    }
+    public String getUsername() throws JSONException {
+        return USERDATA.getString("userName");
+    }
+    public double getBalance() throws JSONException {
+        return Double.valueOf(USERDATA.getString("balance"));
+    }
 
+    public LinkedList<String> StockList(){
+        LinkedList<String> listOfStocks = new LinkedList<String>();
+        Iterator it = UserAccountData.keys();
+        while(it.hasNext()){
+            listOfStocks.add(it.next().toString());
+        }
+        return listOfStocks;
+    }
+
+    public void addMoney(double amount) throws JSONException, IOException {
+        double currentBalance = Double.valueOf(USERDATA.get("balance").toString()) ;
+        USERDATA.put("balance",currentBalance + amount);
+
+        dataUD.put(this.getUserID(),USERDATA);
+        FileWriter file = new FileWriter("USERDATA.json");
+        file.write(dataUD.toString());
+        file.close();
+
+    }
+
+    public void deductMoney(double amount) throws IOException, JSONException {
+        double currentBalance = Double.valueOf(USERDATA.get("balance").toString()) ;
+        USERDATA.put("balance",currentBalance - amount);
+
+        dataUD.put(this.getUserID(),USERDATA);
+        FileWriter file = new FileWriter("USERDATA.json");
+        file.write(dataUD.toString());
+        file.close();
+    }
+
+    public void buyStock(String symbol, int noOfShares) throws JSONException, IOException {
+        Stock stock = new Stock(symbol);
+        LinkedList<String> listOfStocks = this.StockList();
+        boolean exists = false;
+        for(int i=0;i<listOfStocks.size();i++){
+            if(listOfStocks.get(i).toString().equals(symbol)){
+                exists = true;
+                break;
+            }
+        }
+        if(exists){
+            UserAccountData.getJSONObject(symbol).getJSONObject("buys").put(String.valueOf(LocalDateTime.now().minusDays((long) 1)).substring(0,10),noOfShares);
+            int currentHoldings = Integer.parseInt(UserAccountData.getJSONObject(symbol).get("CurrentHoldings").toString());
+            UserAccountData.getJSONObject(symbol).put("CurrentHoldings",currentHoldings + noOfShares);
+        }
+        else{
+            JSONObject stockJSONObject = new JSONObject();
+            JSONObject buys = new JSONObject();
+            JSONObject sells = new JSONObject();
+
+            buys.put(String.valueOf(LocalDateTime.now().minusDays((long) 1)).substring(0,10),noOfShares);
+
+            stockJSONObject.put("buys",buys);
+            stockJSONObject.put("sells",sells);
+
+            stockJSONObject.put("CurrentHoldings",noOfShares);
+
+            UserAccountData.put(symbol,stockJSONObject);
+        }
+
+        double currPrice = new Stock(symbol).getClosePrice();
+        this.deductMoney(currPrice*noOfShares);
+
+        dataUAD.put(this.getUserID(),UserAccountData);
+        FileWriter file = new FileWriter("UserAccount_Data.json");
+        file.write(dataUAD.toString());
+        file.close();
+
+    }
+
+    public void sellStock(String symbol,int noOfShares) throws JSONException, IOException {
+        Stock stock = new Stock(symbol);
+
+        UserAccountData.getJSONObject(symbol).getJSONObject("sells").put(String.valueOf(LocalDateTime.now().minusDays((long) 1)).substring(0,10),noOfShares);
+        int currentHoldings = Integer.parseInt(UserAccountData.getJSONObject(symbol).get("CurrentHoldings").toString());
+        UserAccountData.getJSONObject(symbol).put("CurrentHoldings",currentHoldings - noOfShares);
+        dataUAD.put(this.getUserID(),UserAccountData);
+        FileWriter file = new FileWriter("UserAccount_Data.json");
+        file.write(dataUAD.toString());
+        file.close();
+
+    }
+//    public static void main(String[] args) throws JSONException, IOException {
+//        StockAccount pie = new StockAccount("ID1");
+//        pie.addMoney(200000);
+//
+//    }
 }
-
