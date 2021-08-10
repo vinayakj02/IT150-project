@@ -129,7 +129,7 @@ public class OnLogin extends JFrame implements ActionListener{
 		My_Account_Button.addActionListener(this);
 		Market_Performance_Button.addActionListener(this);
 		Portfolio_Button.addActionListener(this);
-		My_Account_Button.addActionListener(this);
+		My_Stocks_Button.addActionListener(this);
 		Wishlist_Button.addActionListener(this);
 
 	}
