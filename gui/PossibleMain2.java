@@ -72,15 +72,20 @@ public class PossibleMain2 {
 //			manipulateChoice(ch);
 //		}
 //	}
-	public static void onLogin() {
-		System.out.println("Welcome!");
-		//...to be filled in
+	public void onLogin(String userId) {
+		OnLogin log=new OnLogin(userId);
 	}
-//	public static void main(String[] args) throws FileNotFoundException, JSONException {
-//		// TODO Auto-generated method stub
-//		scan=new Scanner(System.in);
-//		int choice=openingPage();
-//		manipulateChoice(choice);
-//	}
+	
+	public void transaction(String userId) {
+		System.out.println("Proceeding to transaction");
+		OnBuy trade=new OnBuy(userId);
+	}
+	public static void main(String[] args) throws FileNotFoundException, JSONException {
+		// TODO Auto-generated method stub
+// 		scan=new Scanner(System.in);
+// 		int choice=openingPage();
+// 		manipulateChoice(choice);
+		FirstPageGUI gui=new FirstPageGUI();
+	}
 
 }
