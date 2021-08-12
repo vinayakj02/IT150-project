@@ -124,7 +124,7 @@ public class StockAccount extends Account{
         int currentHoldings = Integer.parseInt(UserAccountData.getJSONObject(symbol).get("CurrentHoldings").toString());
         UserAccountData.getJSONObject(symbol).put("CurrentHoldings",currentHoldings - noOfShares);
         double currPrice = new Stock(symbol).getClosePrice();
-        this.deductMoney(currPrice*noOfShares);
+        this.addMoney(currPrice*noOfShares);
         dataUAD.put(this.getUserID(),UserAccountData);
         FileWriter file = new FileWriter("UserAccount_Data.json");
         file.write(dataUAD.toString());
