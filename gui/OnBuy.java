@@ -25,6 +25,8 @@ import javax.swing.JCheckBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.swing.JTable;
 
@@ -40,6 +42,10 @@ public class OnBuy extends JFrame implements ActionListener{
 	private JButton btnClear;
 	private JButton btnConfirm;
 	private JComboBox tradeType;
+	private JTextArea billArea;
+	private JButton billButton;
+	private JLabel account;
+	private JCheckBox chckbxNewCheckBox;
 
 	/**
 	 * Launch the application.
@@ -61,17 +67,15 @@ public class OnBuy extends JFrame implements ActionListener{
 	/**
 	 * Create the application.
 	 */
-	public StockAccount getObj() {
-		return stAcc;
-	}
-
-	public void setObj(StockAccount obj) {
-		this.stAcc = obj;
-	}
-	
 	public OnBuy(String userId) {
-		initialize();
 		this.userId=userId;
+		try {
+			stAcc=new StockAccount(userId);
+		} catch (JSONException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		initialize();
 	}
 	/**
 	 * Initialize the contents of the frame.
@@ -103,11 +107,6 @@ public class OnBuy extends JFrame implements ActionListener{
 		frmBuyStock.getContentPane().add(lblNoOfShares);
 		
 		textField = new JTextField();
-//		textField.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//			}
-//		});
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textField.setColumns(10);
 		textField.setBounds(161, 175, 147, 36);
@@ -128,49 +127,42 @@ public class OnBuy extends JFrame implements ActionListener{
 		tradeType.setBounds(161, 71, 127, 34);
 		frmBuyStock.getContentPane().add(tradeType);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Send confirmation message");
-//		chckbxNewCheckBox.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//			}
-//		});
+		chckbxNewCheckBox = new JCheckBox("Send confirmation message");
 		chckbxNewCheckBox.setSelected(true);
 		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		chckbxNewCheckBox.setBounds(130,231 , 346, 50);
 		frmBuyStock.getContentPane().add(chckbxNewCheckBox);
-		JLabel lblNewLabel_1 = new JLabel("Account Details");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(427, 20, 349, 190);
-		frmBuyStock.getContentPane().add(lblNewLabel_1);
 		
-		JButton billButton = new JButton("Generate bill");
-//		btnNewButton.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//			}
-//		});
+		String text="<html>Account details<br><br>User Id: "+userId;
+		try {
+			double bal=stAcc.getBalance();
+			String val=String.format("%.2f", bal);
+			text+="<br>Balance: "+val+"</html>";
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		account = new JLabel(text);
+		account.setHorizontalAlignment(SwingConstants.CENTER);
+		account.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		account.setBounds(427, 20, 349, 190);
+		frmBuyStock.getContentPane().add(account);
+		
+		billButton = new JButton("Generate bill");
 		billButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		billButton.setBounds(116, 301, 171, 44);
 		frmBuyStock.getContentPane().add(billButton);
 		btnClear = new JButton("Clear");
-//		btnClear.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-////				transaction=comboBox.getName();
-//				
-//			}
-//		});
 		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnClear.setBounds(511, 301, 171, 44);
 		frmBuyStock.getContentPane().add(btnClear);
 		
-		JTextArea billArea = new JTextArea();
-		billArea.setEnabled(false);
+		billArea = new JTextArea();
+		billArea.setEnabled(true);
 		billArea.setEditable(false);
 		billArea.setLineWrap(true);
 		billArea.setFont(new Font("Monospaced", Font.PLAIN, 18));
-		billArea.setText("Stock symbol:\r\nUser Id:\r\nAmount transacted:");
 		billArea.setBounds(117, 402, 504, 135);
 		frmBuyStock.getContentPane().add(billArea);
 		
@@ -182,42 +174,52 @@ public class OnBuy extends JFrame implements ActionListener{
 		btnConfirm.addActionListener(this);
 		btnClear.addActionListener(this);
 		billButton.addActionListener(this);
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		transaction=tradeType.getSelectedItem().toString();
+		stockId=StockId.getText();
+		if(stockId.equals("")) {
+			System.out.println("Please enter a valid stock symbol");
+			return;
+		}
+		stockId=stockId.toUpperCase();
+		String num=textField.getText();
+		if(num.equals("")) {
+			System.out.println("Please enter a valid number");
+			return;
+		}
+		qty=Integer.parseInt(num);
 		if(e.getSource()==btnConfirm) {
+			double diff=0;
+			double prev=0;
+			double after=0;
 			try {
-				stAcc=new StockAccount(userId);
-				System.out.println("Balance before transaction:"+stAcc.getBalance());
-			} catch (JSONException | IOException e2) {
-				// TODO Auto-generated catch block
+				prev=stAcc.getBalance();
+				System.out.println("Balance before transaction:"+String.format("%.2f", prev));
+			} catch (JSONException e2) {
 				e2.printStackTrace();
 			}
-			transaction=tradeType.getSelectedItem().toString();
-			stockId=StockId.getText();
-//			qty=textField.getText();
-			qty=Integer.parseInt(textField.getText());
+			
 			System.out.println(transaction);
 			System.out.println(qty);
 			System.out.println(stockId);
-			if(transaction=="Buy") {
+			if(transaction.equals("Buy")) {
 				try {
 					stAcc.buyStock(stockId, qty);
-					System.out.println("Balance after transaction:"+stAcc.getBalance());
+					after=stAcc.getBalance();
 				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
-			if(transaction=="Sell") {
+			if(transaction.equals("Sell")) {
 				try {
 					stAcc.sellStock(stockId, qty);
-					System.out.println("Balance after transaction:"+stAcc.getBalance());
+					after=stAcc.getBalance();
 				} catch (JSONException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -226,9 +228,46 @@ public class OnBuy extends JFrame implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
+			
+			String bal=String.format("%.2f", after);
+			System.out.println("Balance after transaction:"+bal);
+			diff=after-prev;
+			String diffstr=String.format("%.2f", Math.abs(diff));
+
+			String text="<html>Account Details<br><br>User Id: "+userId+"<br>Balance: "+bal+"</html>";
+			account.setText(text);
+			
+			if(chckbxNewCheckBox.isSelected()) {
+				JFrame f=new JFrame();
+				String message="Transaction successful!";
+				if(diff==0)message="Transaction failed!";
+				else if(diff>0)message+="\r\n"+diffstr+" added to your account";
+				else message+="\r\n"+diffstr+" deducted from your account";
+				JOptionPane.showMessageDialog(f,message); 
+			}
 		}
+		if(e.getSource()==billButton) {
+			double price;
+			double total=0;
+			try {
+				Stock stock=new Stock(stockId);
+				price=stock.getClosePrice();
+				total=qty*price;
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("Enter proper Stock symbol");
+				e1.printStackTrace();
+			}
+			String totalstr=String.format("%.2f", total);
+			billArea.setText("Stock symbol:"+stockId+"\r\nUser Id: "+userId+"\r\nAmount transacted: "+totalstr+"\r\nDate: "+LocalDate.now().toString());
+		}
+		if(e.getSource()==btnClear) {
+			StockId.setText("");
+			textField.setText("");
+			billArea.setText("");
 		}
 	}
+}
 
 
 
