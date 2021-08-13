@@ -1,18 +1,13 @@
-
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.BorderLayout;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,7 +15,7 @@ import java.awt.event.MouseEvent;
 public class OnLogin extends JFrame implements ActionListener{
 
 	private JFrame frmStockAccount;
-	PossibleMain2 mainObj;
+
 	JButton Trade_Button, My_Stocks_Button , Portfolio_Button;
 	JButton Market_Performance_Button, Wishlist_Button, My_Account_Button;
 
@@ -28,12 +23,70 @@ public class OnLogin extends JFrame implements ActionListener{
 	public OnLogin(String UserID) {
 		initialize();
 		this.UserID = UserID;
-		mainObj=new PossibleMain2();
+
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
+
+	public void overridebuttonslol(){
+		Trade_Button.setBounds(100,200,120,25);
+		Trade_Button.addActionListener(this);
+		Trade_Button.setBackground(new Color(23,23,23));
+		Trade_Button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+		Trade_Button.setForeground(Color.WHITE);
+		Trade_Button.setBorder(BorderFactory.createEtchedBorder());
+		Trade_Button.setFocusable(false);
+
+		My_Stocks_Button.setBounds(100+120+5,200,120,25);
+		My_Stocks_Button.addActionListener(this);
+		My_Stocks_Button.setBackground(new Color(23,23,23));
+		My_Stocks_Button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+		My_Stocks_Button.setForeground(Color.WHITE);
+		My_Stocks_Button.setBorder(BorderFactory.createEtchedBorder());
+		My_Stocks_Button.setFocusable(false);
+
+		Portfolio_Button.setBounds(100+120+5+120+5,200,120,25);
+		Portfolio_Button.addActionListener(this);
+		Portfolio_Button.setBackground(new Color(23,23,23));
+		Portfolio_Button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+		Portfolio_Button.setForeground(Color.WHITE);
+		Portfolio_Button.setBorder(BorderFactory.createEtchedBorder());
+		Portfolio_Button.setFocusable(false);
+
+		Wishlist_Button.setBounds(100,200+30,120,25);
+		Wishlist_Button.addActionListener(this);
+		Wishlist_Button.setBackground(new Color(23,23,23));
+		Wishlist_Button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+		Wishlist_Button.setForeground(Color.WHITE);
+		Wishlist_Button.setBorder(BorderFactory.createEtchedBorder());
+		Wishlist_Button.setFocusable(false);
+
+		My_Account_Button.setBounds(100+120+5,200+30,120,25);
+		My_Account_Button.addActionListener(this);
+		My_Account_Button.setBackground(new Color(23,23,23));
+		My_Account_Button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+		My_Account_Button.setForeground(Color.WHITE);
+		My_Account_Button.setBorder(BorderFactory.createEtchedBorder());
+		My_Account_Button.setFocusable(false);
+
+		Market_Performance_Button.setBounds(100+120+5+120+5,200+30,120,25);
+		Market_Performance_Button.addActionListener(this);
+		Market_Performance_Button.setBackground(new Color(23,23,23));
+		Market_Performance_Button.setFont(new Font("Comic Sans",Font.ITALIC,15));
+		Market_Performance_Button.setForeground(Color.WHITE);
+		Market_Performance_Button.setBorder(BorderFactory.createEtchedBorder());
+		Market_Performance_Button.setFocusable(false);
+
+
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(1000,500);
+		this.setLayout(null);
+		this.getContentPane().setBackground(new Color(133,205,202));
+		this.setVisible(true);
+
+	}
 	private void initialize() {
 
 		frmStockAccount = this;
@@ -46,12 +99,10 @@ public class OnLogin extends JFrame implements ActionListener{
 		frmStockAccount.setVisible(true);
 		
 		My_Stocks_Button = new JButton("My Stocks");
-
 		My_Stocks_Button.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		My_Stocks_Button.setPreferredSize(new Dimension(91, 21));
+		My_Stocks_Button.setPreferredSize(new Dimension(200, 25));
 		
 		Portfolio_Button = new JButton("Portfolio");
-
 		Portfolio_Button.setPreferredSize(new Dimension(91, 21));
 		Portfolio_Button.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
@@ -65,73 +116,33 @@ public class OnLogin extends JFrame implements ActionListener{
 		Wishlist_Button.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		Market_Performance_Button = new JButton("Market Performance");
-
 		Market_Performance_Button.setPreferredSize(new Dimension(91, 21));
 		Market_Performance_Button.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		Trade_Button = new JButton("Trade");
-
 		Trade_Button.setPreferredSize(new Dimension(91, 21));
 		Trade_Button.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		JLabel lblNewLabel = new JLabel("Welcome!");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblNewLabel.setPreferredSize(new Dimension(90, 93));
-		GroupLayout groupLayout = new GroupLayout(frmStockAccount.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(143)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(Trade_Button, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-						.addComponent(Wishlist_Button, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(12)
-							.addComponent(My_Account_Button, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
-							.addComponent(My_Stocks_Button, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(Portfolio_Button, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-						.addComponent(Market_Performance_Button, GroupLayout.PREFERRED_SIZE, 231, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(21, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(72)
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-					.addGap(137)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(Trade_Button, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-						.addComponent(My_Stocks_Button, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-						.addComponent(Portfolio_Button, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
-					.addGap(59)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(Wishlist_Button, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(My_Account_Button, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addComponent(Market_Performance_Button, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(107, Short.MAX_VALUE))
-		);
-		frmStockAccount.getContentPane().setLayout(groupLayout);
+		JLabel WelcomeUserLabel = new JLabel("Welcome");
+		WelcomeUserLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		WelcomeUserLabel.setPreferredSize(new Dimension(100, 100));
+		WelcomeUserLabel.setBounds(250,50,200,50);
+		WelcomeUserLabel.setForeground(Color.black);
 
-//		this.add(Trade_Button);
-//		this.add(My_Stocks_Button);
-//		this.add(Market_Performance_Button);
-//		this.add(Portfolio_Button);
-//		this.add(My_Account_Button);
-//		this.add(Wishlist_Button);
-//		this.add(lblNewLabel);
-		Trade_Button.addActionListener(this);
-		My_Account_Button.addActionListener(this);
-		Market_Performance_Button.addActionListener(this);
-		Portfolio_Button.addActionListener(this);
-		My_Stocks_Button.addActionListener(this);
-		Wishlist_Button.addActionListener(this);
+		this.add(Trade_Button);
+		this.add(My_Stocks_Button);
+		this.add(Market_Performance_Button);
+		this.add(Portfolio_Button);
+		this.add(My_Account_Button);
+		this.add(Wishlist_Button);
+//		Trade_Button.addActionListener(this);
+//		My_Account_Button.addActionListener(this);
+//		Market_Performance_Button.addActionListener(this);
+//		Portfolio_Button.addActionListener(this);
+//		My_Stocks_Button.addActionListener(this);
+//		Wishlist_Button.addActionListener(this);
+		this.overridebuttonslol();
+		this.add(WelcomeUserLabel);
 
 	}
 
@@ -140,7 +151,6 @@ public class OnLogin extends JFrame implements ActionListener{
 	if(e.getSource()==Trade_Button){
 		//trade here
 		System.out.println("Trading ! ");
-		mainObj.transaction(UserID);
 	}
 	if(e.getSource()==My_Stocks_Button){
 		// my stocks
@@ -148,7 +158,7 @@ public class OnLogin extends JFrame implements ActionListener{
 	}
 	if(e.getSource()==Market_Performance_Button){
 		// market performance
-		System.out.println("Market performance");
+		System.out.println("Market performance !");
 	}
 	if(e.getSource()==My_Account_Button){
 		// My account
@@ -157,11 +167,11 @@ public class OnLogin extends JFrame implements ActionListener{
 	if(e.getSource()==Portfolio_Button){
 		//portfolio
 		System.out.println("Portfolio ! ");
+
 	}
 	if(e.getSource()==Wishlist_Button){
 		//wishlist
 		System.out.println("Wishlist ! ");
-		WishlistGui wish=new WishlistGui(UserID);
 	}
 
 	}
