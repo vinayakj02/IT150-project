@@ -192,6 +192,9 @@ public class WishlistGui extends JFrame implements ActionListener{
 		if(e.getSource()==newWishBtn) {
 			String wish=addWishText.getText();
 			String price=addPrice.getText();
+			for(int i=0;i<list.getItemCount();i++) {
+				if(list.getItemAt(i).toString().equals(wish))list.removeItem(wish);
+			}
 			addWish(wish, price);
 			list.addItem(wish);
 			addWishText.setText("");
