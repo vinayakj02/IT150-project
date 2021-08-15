@@ -1,8 +1,68 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import org.json.JSONException;
-
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
-public class MarketWatch {
+public class MarketWatch extends JFrame implements ActionListener {
+
+    JButton button1,popStockButton,marketIndicesButton;
+    JTextField stockname;
+    public MarketWatch(){
+
+        JLabel stocknameLabel = new JLabel("Stock Name");
+        stocknameLabel.setBounds(100,100 - 50,140,25);
+        stocknameLabel.setFont(new Font("Comic Sans",Font.ITALIC,15));
+        stocknameLabel.setForeground(Color.WHITE);
+
+        stockname = new JTextField();
+        stockname.setBounds(100+90,100- 50,140,25);
+        stockname.setPreferredSize(new Dimension(120,25));
+
+        button1 = new JButton("Get Data");
+        button1.setBounds(246+90,100- 50,120,25);
+        button1.addActionListener(this);
+        button1.setBorder(BorderFactory.createEtchedBorder());
+        button1.setBackground(new Color(23,23,23));
+        button1.setFont(new Font("Comic Sans",Font.ITALIC,15));
+        button1.setForeground(Color.WHITE);
+        button1.setFocusable(false);
+
+        popStockButton = new JButton("Popular Stocks");
+        popStockButton.setBounds(70+90,230 - 120,120,25);
+        popStockButton.addActionListener(this);
+        popStockButton.setBorder(BorderFactory.createEtchedBorder());
+        popStockButton.setBackground(new Color(23,23,23));
+        popStockButton.setFont(new Font("Comic Sans",Font.ITALIC,15));
+        popStockButton.setForeground(Color.WHITE);
+        popStockButton.setFocusable(false);
+
+        marketIndicesButton = new JButton("Market Indices");
+        marketIndicesButton.setBounds(210+90,230 - 120,120,25);
+        marketIndicesButton.addActionListener(this);
+        marketIndicesButton.setBorder(BorderFactory.createEtchedBorder());
+        marketIndicesButton.setBackground(new Color(23,23,23));
+        marketIndicesButton.setFont(new Font("Comic Sans",Font.ITALIC,15));
+        marketIndicesButton.setForeground(Color.WHITE);
+        marketIndicesButton.setFocusable(false);
+
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(600,400);
+        this.setLayout(null);
+        this.getContentPane().setBackground(new Color(133,205,202));
+        this.setVisible(true);
+
+        this.add(button1);
+        this.add(stocknameLabel);
+        this.add(stockname);
+        this.add(popStockButton);
+        this.add(marketIndicesButton);
+
+
+    }
     public void forEachStock(Stock s) throws JSONException {
 
         LocalDateTime date = LocalDateTime.now().minusDays((long)1.0);
@@ -28,14 +88,17 @@ public class MarketWatch {
     }
     public void popularTechStocks() throws JSONException {
 
+        System.out.println("*".repeat(50));
         System.out.println("Stock : Current price : Performance");
-        Stock[] StockArr = {new Stock("MSFT"), new Stock("IBM"), new Stock("TSLA"), new Stock("FB"), new Stock("GS"),new Stock("AMZN"), new Stock("ORCL"), new Stock("GOOGL"), new Stock("TXN"),new Stock("AAPL") };
+        Stock[] StockArr = {new Stock("GOOGL"), new Stock("TXN"),new Stock("AAPL") };
         for(Stock A : StockArr){
-            forEachStock(A);
+            this.forEachStock(A);
         }
+        System.out.println("*".repeat(50));
 
     }
     public void marketIndices(){
+        System.out.println("\t\tMarket Indices \n"+"-".repeat(50));
         System.out.println("NYSE Composite index: $16,868.11");
         System.out.println("Dow Jones Industrial Average: $35,515.38");
         System.out.println("S&P 500 Index: $14,822.55");
@@ -43,10 +106,39 @@ public class MarketWatch {
         System.out.println("Global Dow Realtime USD: $4,097.02");
         System.out.println("Dow Jones U.S. Total Stock Market Index: $46,820.65");
         System.out.println("NASDAQ 100 Index (NASDAQ Calculation): $15,136.68");
-        System.out.println("NYSE Composite Index: $16,868.11");
+        System.out.println("NYSE Composite Index: $16,868.11"+"-".repeat(50));
     }
     public void completeStockData(String symbol) throws JSONException {
+        System.out.println("*".repeat(50));
         Stock stock = new Stock(symbol);
         forEachStock(stock);
+        System.out.println("*".repeat(50));
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==button1){
+            try {
+                System.out.println("*".repeat(50));
+                System.out.println("Stock : Current price : Performance");
+                forEachStock(new Stock(stockname.getText().toString()));
+                System.out.println("*".repeat(50));
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
+        }
+        if(e.getSource()==marketIndicesButton){
+            this.marketIndices();
+        }
+        if(e.getSource()==popStockButton){
+            try {
+                this.popularTechStocks();
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws JSONException {
+//         MarketWatch m = new MarketWatch();
     }
 }
