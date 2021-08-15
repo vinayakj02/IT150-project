@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 import javax.swing.JTable;
 
@@ -46,10 +47,8 @@ public class OnBuy extends JFrame implements ActionListener{
 	private JButton billButton;
 	private JLabel account;
 	private JCheckBox chckbxNewCheckBox;
+	
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 //		OnBuy trade=new OnBuy("ID1");
 //		EventQueue.invokeLater(new Runnable() {
@@ -64,9 +63,6 @@ public class OnBuy extends JFrame implements ActionListener{
 //		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public OnBuy(String userId) {
 		this.userId=userId;
 		try {
@@ -77,6 +73,13 @@ public class OnBuy extends JFrame implements ActionListener{
 		}
 		initialize();
 	}
+	
+	public boolean qtyExists(String stock,int qty) {
+		int no=stAcc.qtyStock(stock);
+		if(no>=qty)return true;
+		return false;
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -86,6 +89,7 @@ public class OnBuy extends JFrame implements ActionListener{
 		frmBuyStock.setBounds(100, 100, 800, 600);
 		frmBuyStock.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBuyStock.getContentPane().setLayout(null);
+		frmBuyStock.getContentPane().setBackground(new Color(133,205,202));
 //		frmBuyStock.setVisible(true);
 		
 		StockId = new JTextField();
@@ -177,36 +181,60 @@ public class OnBuy extends JFrame implements ActionListener{
 		
 	}
 
+	public void displayMessage(String message) {
+		JFrame f=new JFrame();
+		JOptionPane.showMessageDialog(f,message);
+	}
+	
+	public double possibleAmount(String stockId,int qty) {
+		double price;
+		double total=0;
+		try {
+			Stock stock=new Stock(stockId);
+			price=stock.getClosePrice();
+			total=qty*price;
+		} catch (JSONException e1) {
+			System.out.println("Enter proper Stock symbol");
+			e1.printStackTrace();
+		}
+		return total;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		transaction=tradeType.getSelectedItem().toString();
 		stockId=StockId.getText();
+		String message="";
 		if(stockId.equals("")) {
-			System.out.println("Please enter a valid stock symbol");
+//			System.out.println("Please enter a valid stock symbol");
+			displayMessage("Please enter a valid stock symbol");
 			return;
 		}
 		stockId=stockId.toUpperCase();
 		String num=textField.getText();
 		if(num.equals("")) {
-			System.out.println("Please enter a valid number");
+//			System.out.println("Please enter a valid number");
+			displayMessage("Please enter a valid number");
 			return;
 		}
 		qty=Integer.parseInt(num);
 		if(e.getSource()==btnConfirm) {
 			double diff=0;
 			double prev=0;
-			double after=0;
+			boolean success=true;
 			try {
 				prev=stAcc.getBalance();
 				System.out.println("Balance before transaction:"+String.format("%.2f", prev));
 			} catch (JSONException e2) {
 				e2.printStackTrace();
 			}
+			double after=prev;
 			
-			System.out.println(transaction);
-			System.out.println(qty);
-			System.out.println(stockId);
 			if(transaction.equals("Buy")) {
+				if(possibleAmount(stockId, qty)>prev) {
+					displayMessage("Transaction failed!\nYou do not have enough balance");
+					return;
+				}
 				try {
 					stAcc.buyStock(stockId, qty);
 					after=stAcc.getBalance();
@@ -217,16 +245,24 @@ public class OnBuy extends JFrame implements ActionListener{
 				}
 			}
 			if(transaction.equals("Sell")) {
-				try {
-					stAcc.sellStock(stockId, qty);
-					after=stAcc.getBalance();
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(!stAcc.stockExists(stockId)) {
+					success=false;
 				}
+				if(!qtyExists(stockId, qty)) {
+					success=false;
+				}
+				
+				if(success) {
+					try {
+						stAcc.sellStock(stockId, qty);
+						after=stAcc.getBalance();
+					} catch (JSONException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
 			}
 			
 			String bal=String.format("%.2f", after);
@@ -238,28 +274,30 @@ public class OnBuy extends JFrame implements ActionListener{
 			account.setText(text);
 			
 			if(chckbxNewCheckBox.isSelected()) {
-				JFrame f=new JFrame();
-				String message="Transaction successful!";
-				if(diff==0)message="Transaction failed!";
+				message="Transaction successful!";
+				if(!success) {
+					if(transaction.equals("Sell"))message="Transaction failed!\nYou do not own enough stocks";
+					else message="Transaction failed!";
+				}
 				else if(diff>0)message+="\r\n"+diffstr+" added to your account";
 				else message+="\r\n"+diffstr+" deducted from your account";
-				JOptionPane.showMessageDialog(f,message); 
+				displayMessage(message);
 			}
 		}
 		if(e.getSource()==billButton) {
-			double price;
+			double price=0;
 			double total=0;
 			try {
-				Stock stock=new Stock(stockId);
-				price=stock.getClosePrice();
+				Stock s=new Stock(stockId);
+				price=s.getClosePrice();
 				total=qty*price;
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				System.out.println("Enter proper Stock symbol");
 				e1.printStackTrace();
 			}
+			String stprice=String.format("%.2f", price);
+//			double total=possibleAmount(stockId, qty);
 			String totalstr=String.format("%.2f", total);
-			billArea.setText("Stock symbol:"+stockId+"\r\nUser Id: "+userId+"\r\nAmount transacted: "+totalstr+"\r\nDate: "+LocalDate.now().toString());
+			billArea.setText("Stock symbol:"+stockId+"\r\nTransaction type: "+transaction+"\r\nStock price: "+stprice+"\r\nQuantity: "+qty+"\r\nAmount transacted: "+totalstr+"\r\nDate: "+LocalDate.now().toString());
 		}
 		if(e.getSource()==btnClear) {
 			StockId.setText("");
