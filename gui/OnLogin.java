@@ -18,17 +18,48 @@ public class OnLogin extends JFrame implements ActionListener{
 
 	JButton Trade_Button, My_Stocks_Button , Portfolio_Button;
 	JButton Market_Performance_Button, Wishlist_Button, My_Account_Button;
+	private Portfolio port;
+	private JTable table;
 
 	String UserID;
 	public OnLogin(String UserID) {
-		initialize();
 		this.UserID = UserID;
+		try {
+			port=new Portfolio(UserID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		initialize();
 
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	public void displayStocks() throws JSONException, IOException {
+		StockAccount acc=new StockAccount(UserID);
+		LinkedList<String> list=new LinkedList<>();
+		list=acc.StockList();
+		String rows[][]=new String[list.size()][4];
+		String columns[]= {"S.No","Stock Id","Current holding","Stock price"};
+		for(int i=0;i<list.size();i++) {
+			Stock stock=new Stock(list.get(i));
+			String sym=stock.getSymbol();
+			String qty=String.valueOf(port.getStockHolding(stock));
+			String price=String.valueOf(stock.getClosePrice());
+			String row[]= {String.valueOf(i+1),sym,qty,price};
+			rows[i]=row;
+		}
+
+		table=new JTable(rows, columns);
+
+		JFrame f=new JFrame();
+		table.setBounds(30,40,600,300);          
+        	JScrollPane sp=new JScrollPane(table);    
+        	f.add(sp);          
+        	f.setSize(600,400);    
+        	f.setVisible(true);
+	}	
 
 	public void overridebuttonslol(){
 		Trade_Button.setBounds(100,200,120,25);
@@ -155,6 +186,11 @@ public class OnLogin extends JFrame implements ActionListener{
 	if(e.getSource()==My_Stocks_Button){
 		// my stocks
 		System.out.println("My Stocks ! ");
+		try {
+			displayStocks();
+		} catch (JSONException | IOException e2) {
+			e2.printStackTrace();
+		}
 	}
 	if(e.getSource()==Market_Performance_Button){
 		// market performance
