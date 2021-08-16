@@ -12,5 +12,10 @@ public double	getOverallValue() throws JSONException;
 	public double getOverallInvestment() throws JSONException;
 	public double getOverallSales() throws JSONException;
 	public double getOverallProfit() throws NumberFormatException, JSONException;
+	public void displayStockList();
+	public void displayStockPortfolio(Stock s) throws JSONException;
+	public void displayFullPortfolio() throws JSONException;
+	public void displayPurchaseHistory() throws JSONException;
+	public void displaySaleHistory() throws JSONException;
 	
 }
