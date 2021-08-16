@@ -56,6 +56,36 @@ public class LogIn {
 		         // TODO Auto-generated catch block
 		         e.printStackTrace();
 		      }
+	    //To update UserAccount_Data.json..
+	      FileReader reader=null;
+		try {
+			reader = new FileReader("UserAccount_Data.json");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	        Scanner scan = new Scanner(reader);
+	        JSONObject dataUAD;
+	        String s="";
+	        while(scan.hasNext()){
+	            s = s + scan.nextLine();
+	        }
+	        try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	        dataUAD = new JSONObject(s);
+	        JSONObject UserAccount_Data; 
+	        UserAccount_Data=new JSONObject();
+        	dataUAD.put(acc.getUserId(),UserAccount_Data);
+        	FileWriter file2;
+			try {
+				file2 = new FileWriter("UserAccount_Data.json");
+				file2.write(dataUAD.toString());
+				file2.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 //		      System.out.println("JSON file created: "+userInfo.toString(2));
 	}
 
