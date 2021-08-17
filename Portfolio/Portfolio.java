@@ -193,7 +193,7 @@ String col[]= {"a","b"};
 
 JFrame pop=new JFrame();
 JTable table =new JTable(data,col);
-table.setRowHeight(20);
+table.setRowHeight(50);
 pop.add(table);
 pop.setSize(300,400);
 pop.setVisible(true);
@@ -244,7 +244,7 @@ public void displayFullPortfolio() throws JSONException
 
 	JFrame pop=new JFrame();
 	JTable table =new JTable(data,col);
-	table.setRowHeight(20);
+	table.setRowHeight(50);
 	pop.add(table);
 	pop.setSize(300,400);
 	pop.setVisible(true);
@@ -303,7 +303,7 @@ public void displayPurchaseHistory() throws JSONException
 
 		JFrame pop=new JFrame();
 		JTable table =new JTable(data,col);
-		table.setRowHeight(20);
+		table.setRowHeight(50);
 		pop.add(table);
 		pop.setSize(300,400);
 		pop.setVisible(true);
@@ -362,7 +362,7 @@ public void displaySaleHistory() throws JSONException
 
 		JFrame pop=new JFrame();
 		JTable table =new JTable(data,col);
-		table.setRowHeight(20);
+		table.setRowHeight(50);
 		pop.add(table);
 		pop.setSize(300,400);
 		pop.setVisible(true);
