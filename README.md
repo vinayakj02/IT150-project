@@ -2,11 +2,7 @@
 
 # Stock Trading System
 
----
-
-*USERDATA.json* and *UserAccount_data.json* are outside the *src* folder. We are using org.json.JSONObject , it is in the *lib* folder. To start the program , run ***PossibleMain2.java*** . 
-
----
+*USERDATA.json* and *UserAccount_data.json* are outside the *src* folder. We are using org.json.JSONObject , it is in the *lib* folder. To start the program , run ***PossibleMain2.java*** . There are 16 .java files in the project.
 
 Course Instructor : Dr. Sidney  Rosario, IT Dept, NITK
 
