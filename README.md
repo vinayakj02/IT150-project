@@ -1,8 +1,8 @@
 # IT-150 Project
-_________
+
 For the final project , please go to [Stock Trading System](https://github.com/vinayakj02/Stock-Trading-System).
 Course Instructor : Dr. Sidney  Rosario, IT Dept, NITK
-_____________
+
 ## Group 6
 ### Members :
 
